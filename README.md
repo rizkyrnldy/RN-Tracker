@@ -2,11 +2,11 @@
 
 ## Installation
 
-1. Install <b>RN-tracker</b>
+1. Install [`RN-Tracker`](https://github.com/rizkyrnldy/RN-Tracker)
 ```sh
   npm install rn-tracker --save
   ```
-2. Install [`react-native-background-timer`] for service in background (https://github.com/ocetnik/react-native-background-timer)
+2. Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer) for service in background 
 ```sh
   npm install react-native-background-timer --save
   
@@ -56,6 +56,6 @@ RNTracker.stop({
 
 ## Example
 
-[`Click Here`](https://github.com/rizkyrnldy/RN-Tracke/blob/master/example.js)
+[`Click Here`](https://github.com/rizkyrnldy/RN-Tracker/blob/master/example.js)
 
 
