@@ -2,14 +2,15 @@
 
 ## Installation
 
-1. ```sh
+1. Install <b>RN-tracker</b>
+```sh
   npm install rn-tracker --save
   ```
-2. Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer)
+2. Install [`react-native-background-timer`] for service in background (https://github.com/ocetnik/react-native-background-timer)
 ```sh
   npm install react-native-background-timer --save
   
-  react-native link
+  react-native link react-native-background-timer
   ```
 3. Edit <b>config.js</b>
 ```sh
