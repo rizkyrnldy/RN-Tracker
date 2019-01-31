@@ -5,7 +5,7 @@ import tripApi from './api/post';
 import config from './config';
 
 let intervalId = null;
-export default class RNTracker{
+export default class RNTracker {
     static start(params) {
         ToastAndroid.show('Loading...', ToastAndroid.SHORT);
         navigator.geolocation.getCurrentPosition((position) => {
@@ -18,7 +18,7 @@ export default class RNTracker{
                         this.process(params.id_shipping);
                     }, config.timeInterval);
                 });
-            }else{
+            } else {
                 intervalId = BackgroundTimer.setInterval(() => {
                     this.process(params.id_shipping);
                 }, config.timeInterval);
@@ -27,8 +27,8 @@ export default class RNTracker{
             ToastAndroid.show('Start', ToastAndroid.SHORT);
         }, (error) => {
             ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
-        }, 
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+        },
+            { enableHighAccuracy: true, timeout: config.timeInterval }
         );
     }
 
@@ -46,11 +46,11 @@ export default class RNTracker{
         }, (error) => {
             ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
         },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: config.timeInterval }
         );
     }
 
-    
+
     static stop(params) {
         ToastAndroid.show('Loading...', ToastAndroid.SHORT);
         navigator.geolocation.getCurrentPosition((position) => {
@@ -69,7 +69,7 @@ export default class RNTracker{
         }, (error) => {
             ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
         },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: config.timeInterval }
         );
     }
 
@@ -84,9 +84,10 @@ export default class RNTracker{
             });
         }, (error) => {
             ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
+            console.log(error);
         },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
-        );  
+            { enableHighAccuracy: true, timeout: config.timeInterval }
+        );
     }
 
 }
