@@ -2,17 +2,17 @@
 
 ## Installation
 
-1. Install [`RN-Tracker`](https://github.com/rizkyrnldy/RN-Tracker)
+Install [`RN-Tracker`](https://github.com/rizkyrnldy/RN-Tracker)
 ```sh
   npm install rn-tracker --save
   ```
-2. Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer) for service in background 
+Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer) for service in background 
 ```sh
   npm install react-native-background-timer --save
   
   react-native link react-native-background-timer
   ```
-3. Edit <b>config.js</b>
+Edit <b>config.js</b>
 ```sh
 var config = {
   ip: 'http://123.123.123:8000', //Your IP Address for API
