@@ -13,14 +13,14 @@ export default class RNTracker {
             var lng = JSON.stringify(position.coords.longitude);
             var status = 'start';
             if (params.btn !== undefined && params.btn) {
-                tripApi.Trip(lat, lng, status, params.id_shipping).then((response) => {
+                tripApi.Trip(lat, lng, status, params).then((response) => {
                     intervalId = BackgroundTimer.setInterval(() => {
-                        this.process(params.id_shipping);
+                        this.process(params);
                     }, config.timeInterval);
                 });
             } else {
                 intervalId = BackgroundTimer.setInterval(() => {
-                    this.process(params.id_shipping);
+                    this.process(params);
                 }, config.timeInterval);
             }
             AsyncStorage.setItem('@status:key', 'true');
@@ -38,7 +38,7 @@ export default class RNTracker {
             var lat = JSON.stringify(position.coords.latitude);
             var lng = JSON.stringify(position.coords.longitude);
             var status = 'pickup';
-            tripApi.Trip(lat, lng, status, params.id_shipping).then((response) => {
+            tripApi.Trip(lat, lng, status, params).then((response) => {
                 ToastAndroid.show('Pickup Success', ToastAndroid.SHORT);
             });
         }, (error) => {
@@ -56,7 +56,7 @@ export default class RNTracker {
             var lng = JSON.stringify(position.coords.longitude);
             var status = 'stop';
             if (params !== undefined && params.btn) {
-                tripApi.Trip(lat, lng, status, params.id_shipping).then((response) => {
+                tripApi.Trip(lat, lng, status, params).then((response) => {
                     ToastAndroid.show('Stop', ToastAndroid.SHORT);
                 });
             }
@@ -72,12 +72,12 @@ export default class RNTracker {
     }
 
 
-    static process(id_shipping) {
+    static process(params) {
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = JSON.stringify(position.coords.latitude);
             var lng = JSON.stringify(position.coords.longitude);
             var status = 'otw';
-            tripApi.Trip(lat, lng, status, id_shipping).then((response) => {
+            tripApi.Trip(lat, lng, status, params).then((response) => {
                 ToastAndroid.show('lat: ' + JSON.stringify(position.coords.latitude) + ', ' + 'lng: ' + JSON.stringify(position.coords.longitude), ToastAndroid.SHORT);
             });
         }, (error) => {

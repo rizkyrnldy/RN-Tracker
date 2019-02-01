@@ -4,14 +4,14 @@
 
 Install [`RN-Tracker`](https://github.com/rizkyrnldy/RN-Tracker)
 ```sh
-  npm install rn-tracker --save
-  ```
+npm install rn-tracker --save
+```
 Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer) for service in background 
 ```sh
-  npm install react-native-background-timer --save
-  
-  react-native link react-native-background-timer
-  ```
+npm install react-native-background-timer --save
+
+react-native link react-native-background-timer
+```
 Edit <b>config.js</b>
 ```sh
 var config = {
@@ -31,7 +31,8 @@ import RNTracker from 'rn-tracker';
 #### Start Tracker
 ```sh
 RNTracker.start({
-  id_shipping: YOUR ID,
+  shipment_code: YOUR ID,
+  member_code: YOUR ID,
   btn: true,
 });
 ```
@@ -39,7 +40,8 @@ RNTracker.start({
 #### Pickup / Pause Tracker
 ```sh
 RNTracker.pickup({
-  id_shipping: YOUR ID,
+  shipment_code: YOUR ID,
+  member_code: YOUR ID,
   btn: true,
 });
 ```
@@ -48,7 +50,8 @@ RNTracker.pickup({
 #### Stop Tracker
 ```sh
 RNTracker.stop({
-  id_shipping: YOUR ID,
+  shipment_code: YOUR ID,
+  member_code: YOUR ID,
   btn: true,
 });
 ```

@@ -2,7 +2,7 @@ import config from '../config';
 var url = config.ip;
 
 var Post = {
-    Trip(lat, lng, status, id_shipping) {
+    Trip(lat, lng, status, params) {
         return fetch(url + '/insert', {
             method: 'POST',
             headers: {
@@ -14,7 +14,8 @@ var Post = {
                 lat: lat,
                 lng: lng,
                 status: status,
-                id_shipping: id_shipping,
+                shipment_code: params.shipment_code,
+                member_code: params.member_code,
             })
         }).then(
             (responseData) => responseData.json()
@@ -23,4 +24,5 @@ var Post = {
         })
     }
 }
+
 module.exports = Post;

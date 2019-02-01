@@ -7,6 +7,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
             'start': true,
             'Loading': true,
@@ -30,7 +31,7 @@ export default class App extends Component {
                 });
             } else if (result === 'true') {
                 RNTracker.start({
-                    id_shipping: id,
+                    shipment_codes: id,
                 });
                 this.setState({
                     'start': true,
@@ -42,7 +43,8 @@ export default class App extends Component {
 
     start() {
         RNTracker.start({
-            id_shipping: DeviceInfo.getUniqueID(),
+            shipment_code: DeviceInfo.getUniqueID(),
+            member_code: DeviceInfo.getUniqueID() + '-member',
             btn: true,
         });
         this.setState({
@@ -53,7 +55,8 @@ export default class App extends Component {
     stop() {
         RNTracker.stop({
             btn: true,
-            id_shipping: DeviceInfo.getUniqueID(),
+            shipment_code: DeviceInfo.getUniqueID(),
+            member_code: DeviceInfo.getUniqueID() + 'member',
         });
         this.setState({
             'start': false
@@ -62,7 +65,8 @@ export default class App extends Component {
 
     pickup() {
         RNTracker.pickup({
-            id_shipping: DeviceInfo.getUniqueID(),
+            shipment_code: DeviceInfo.getUniqueID(),
+            member_code: DeviceInfo.getUniqueID() + 'member',
         });
     }
 
@@ -71,7 +75,9 @@ export default class App extends Component {
         if (this.state.Loading) {
             return (
                 <View>
-                    <Text>Loading</Text>
+                    <Text>
+                        Loading
+            </Text>
                 </View>
             );
         }
