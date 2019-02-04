@@ -26,7 +26,7 @@ export default class RNTracker {
             AsyncStorage.setItem('@status:key', 'true');
             ToastAndroid.show('Start', ToastAndroid.SHORT);
         }, (error) => {
-            ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
         },
             { enableHighAccuracy: true, timeout: config.timeInterval }
         );
@@ -42,7 +42,7 @@ export default class RNTracker {
                 ToastAndroid.show('Pickup Success', ToastAndroid.SHORT);
             });
         }, (error) => {
-            ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
         },
             { enableHighAccuracy: true, timeout: config.timeInterval }
         );
@@ -62,10 +62,11 @@ export default class RNTracker {
             }
             AsyncStorage.setItem('@status:key', 'false');
             BackgroundTimer.clearInterval(intervalId);
+            navigator.geolocation.clearWatch(intervalId);
             ToastAndroid.show('Stop', ToastAndroid.SHORT);
 
         }, (error) => {
-            ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
         },
             { enableHighAccuracy: true, timeout: config.timeInterval }
         );
@@ -81,7 +82,7 @@ export default class RNTracker {
                 ToastAndroid.show('lat: ' + JSON.stringify(position.coords.latitude) + ', ' + 'lng: ' + JSON.stringify(position.coords.longitude), ToastAndroid.SHORT);
             });
         }, (error) => {
-            ToastAndroid.show('Failed Connected', ToastAndroid.SHORT);
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
         },
             { enableHighAccuracy: true, timeout: config.timeInterval }
         );

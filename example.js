@@ -4,10 +4,8 @@ import RNTracker from 'rn-tracker';
 import DeviceInfo from 'react-native-device-info';
 
 export default class App extends Component {
-
     constructor(props) {
         super(props)
-
         this.state = {
             'start': true,
             'Loading': true,
@@ -15,7 +13,6 @@ export default class App extends Component {
     };
 
     componentDidMount() {
-        let id = DeviceInfo.getUniqueID();
         AsyncStorage.getItem('@status:key', (err, result) => {
             if (result === null) {
                 AsyncStorage.setItem('@status:key', 'false');
@@ -31,7 +28,8 @@ export default class App extends Component {
                 });
             } else if (result === 'true') {
                 RNTracker.start({
-                    shipment_codes: id,
+                    shipment_code: DeviceInfo.getUniqueID(),
+                    member_code: DeviceInfo.getUniqueID() + '-member',
                 });
                 this.setState({
                     'start': true,
@@ -75,9 +73,7 @@ export default class App extends Component {
         if (this.state.Loading) {
             return (
                 <View>
-                    <Text>
-                        Loading
-            </Text>
+                    <Text>Loading</Text>
                 </View>
             );
         }
@@ -85,25 +81,25 @@ export default class App extends Component {
             <View style={styles.container}>
                 {
                     !this.state.start ?
-                        <TouchableNativeFeedback onPress={() => this.start()}>
-                            <View style={{ padding: 20, backgroundColor: 'green', borderRadius: 20 }}>
-                                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15 }}>Start</Text>
-                            </View>
-                        </TouchableNativeFeedback> :
-                        <View>
-                            <TouchableNativeFeedback onPress={() => this.stop()}>
-                                <View style={{ padding: 20, backgroundColor: 'red', borderRadius: 20 }}>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15, textAlign: 'center' }}>Stop</Text>
-                                </View>
-                            </TouchableNativeFeedback>
-
-                            <TouchableNativeFeedback onPress={() => this.pickup()}>
-                                <View style={{ padding: 20, marginTop: 50, backgroundColor: 'blue', borderRadius: 20 }}>
-                                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15 }}>Pickup</Text>
-                                </View>
-                            </TouchableNativeFeedback>
-
+                    <TouchableNativeFeedback onPress={() => this.start()}>
+                        <View style={{ padding: 20, backgroundColor: 'green', borderRadius: 20 }}>
+                            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15 }}>Start</Text>
                         </View>
+                    </TouchableNativeFeedback> :
+                    <View>
+                        <TouchableNativeFeedback onPress={() => this.stop()}>
+                            <View style={{ padding: 20, backgroundColor: 'red', borderRadius: 20 }}>
+                                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15, textAlign: 'center' }}>Stop</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+
+                        <TouchableNativeFeedback onPress={() => this.pickup()}>
+                            <View style={{ padding: 20, marginTop: 50, backgroundColor: 'blue', borderRadius: 20 }}>
+                                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15 }}>Pickup</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+
+                    </View>
                 }
             </View>
         );
