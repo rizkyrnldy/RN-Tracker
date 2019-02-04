@@ -1,7 +1,7 @@
 import config from '../config';
 var url = config.ip;
 
-var Post = {
+var post = {
     Trip(lat, lng, status, params) {
         return fetch(url + '/insert', {
             method: 'POST',
@@ -25,4 +25,4 @@ var Post = {
     }
 }
 
-module.exports = Post;
+module.exports = post;

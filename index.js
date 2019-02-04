@@ -1,7 +1,7 @@
 'use strict';
-import { ToastAndroid, AsyncStorage, NetInfo } from 'react-native';
+import { ToastAndroid, AsyncStorage} from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
-import tripApi from './api/Post';
+import tripApi from './api/post';
 import config from './config';
 
 let intervalId = null;
