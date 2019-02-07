@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { AsyncStorage, StyleSheet, Text, View, TouchableNativeFeedback } from 'react-native';
 import RNTracker from 'rn-tracker';
-import DeviceInfo from 'react-native-device-info';
 
 export default class App extends Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -24,12 +24,12 @@ export default class App extends Component {
                 RNTracker.stop();
                 this.setState({
                     'start': false,
-                    'Loading': false
+                    'Loading': false,
                 });
             } else if (result === 'true') {
                 RNTracker.start({
-                    shipment_code: DeviceInfo.getUniqueID(),
-                    member_code: DeviceInfo.getUniqueID() + '-member',
+                    shipment_code: 'YOUR ID',
+                    member_code: 'YOUR ID',
                 });
                 this.setState({
                     'start': true,
@@ -41,8 +41,8 @@ export default class App extends Component {
 
     start() {
         RNTracker.start({
-            shipment_code: DeviceInfo.getUniqueID(),
-            member_code: DeviceInfo.getUniqueID() + '-member',
+            shipment_code: 'YOUR ID',
+            member_code: 'YOUR ID',
             btn: true,
         });
         this.setState({
@@ -53,21 +53,21 @@ export default class App extends Component {
     stop() {
         RNTracker.stop({
             btn: true,
-            shipment_code: DeviceInfo.getUniqueID(),
-            member_code: DeviceInfo.getUniqueID() + 'member',
+            shipment_code: 'YOUR ID',
+            member_code: 'YOUR ID',
         });
         this.setState({
-            'start': false
+            'start': false,
+            'count': 0
         })
     }
 
     pickup() {
         RNTracker.pickup({
-            shipment_code: DeviceInfo.getUniqueID(),
-            member_code: DeviceInfo.getUniqueID() + 'member',
+            shipment_code: 'YOUR ID',
+            member_code: 'YOUR ID',
         });
     }
-
 
     render() {
         if (this.state.Loading) {
@@ -79,8 +79,7 @@ export default class App extends Component {
         }
         return (
             <View style={styles.container}>
-                {
-                    !this.state.start ?
+                {!this.state.start ?
                     <TouchableNativeFeedback onPress={() => this.start()}>
                         <View style={{ padding: 20, backgroundColor: 'green', borderRadius: 20 }}>
                             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 15 }}>Start</Text>

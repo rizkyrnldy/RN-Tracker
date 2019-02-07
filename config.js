@@ -1,6 +1,6 @@
 var config = {
-    ip: 'http://123.123.123:8000', //Your IP Address for API
-    timeInterval: 5000, //Timer
+    ip: '######', //Your IP Address for API
+    timeInterval: 5000, //Time Interval
 }
 
 module.exports = config;

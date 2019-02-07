@@ -1,6 +1,6 @@
 {
   "name": "rn-tracker",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "React Native GPS Tracker for Logistic",
   "main": "index.js",
   "scripts": {
