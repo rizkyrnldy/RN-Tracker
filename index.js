@@ -6,28 +6,23 @@ import config from './config';
 const { RNTGEO } = NativeModules;
 
 var intervalId = null;
-let del_ = null;
-let count = 1;
+var listLocation = [];
 export default class RNTracker {
 
     static start(params) {
-        // delete
-        del_ = BackgroundTimer.runBackgroundTimer(() => {
-            console.log(count);
-            count++;
-        }, 1000);
-
-        ToastAndroid.show('Loading Start...', ToastAndroid.SHORT);
         this.getLocation(
             (position) => {
-                var lat = JSON.stringify(position.coords.latitude);
-                var lng = JSON.stringify(position.coords.longitude);
+                let location = {
+                    'lat': JSON.stringify(position.coords.latitude),
+                    'lng': JSON.stringify(position.coords.longitude)
+                };
                 var status = 'start';
                 if (params.btn !== undefined && params.btn) {
-                    tripApi.Trip(lat, lng, status, params).then((response) => {
+                    tripApi.TripArray(JSON.stringify(location), location.lat, location.lng, status, params).then((response) => {
                         intervalId = BackgroundTimer.runBackgroundTimer(() => {
                             this.process(params);
                         }, config.timeInterval);
+                        ToastAndroid.show('Start Success', ToastAndroid.SHORT);
                     });
                 } else {
                     intervalId = BackgroundTimer.runBackgroundTimer(() => {
@@ -42,13 +37,14 @@ export default class RNTracker {
     }
 
     static pickup(params) {
-        ToastAndroid.show('Loading Pickup...', ToastAndroid.SHORT);
         this.getLocation(
             (position) => {
-                var lat = JSON.stringify(position.coords.latitude);
-                var lng = JSON.stringify(position.coords.longitude);
+                let location = {
+                    'lat': JSON.stringify(position.coords.latitude),
+                    'lng': JSON.stringify(position.coords.longitude)
+                };
                 var status = 'pickup';
-                tripApi.Trip(lat, lng, status, params).then((response) => {
+                tripApi.TripArray(JSON.stringify(location), location.lat, location.lng, status, params).then((response) => {
                     ToastAndroid.show('Pickup Success', ToastAndroid.SHORT);
                 });
             }, (error) => console.log('This is the error ', error),
@@ -58,44 +54,70 @@ export default class RNTracker {
 
 
     static stop(params) {
-        ToastAndroid.show('Loading Stop...', ToastAndroid.SHORT);
         this.getLocation(
             (position) => {
-                var lat = JSON.stringify(position.coords.latitude);
-                var lng = JSON.stringify(position.coords.longitude);
-                var status = 'stop';
-                if (params !== undefined && params.btn) {
-                    tripApi.Trip(lat, lng, status, params).then((response) => {
-                        ToastAndroid.show('Stop', ToastAndroid.SHORT);
-                    });
-                }
-                // delete
-                BackgroundTimer.clearInterval(del_);
+                let location = {
+                    'lat': JSON.stringify(position.coords.latitude),
+                    'lng': JSON.stringify(position.coords.longitude)
+                };
+                AsyncStorage.getItem('@status:location', (err, result) => {
+                    let data = {
+                        'result': result,
+                        'lat': location.lat,
+                        'lng': location.lng,
+                        'status': 'otw',
+                        'params': params
+                    }
+                    if (params !== undefined && params.btn) {
+                        this.pushData(data).then((res) => {
+                            tripApi.TripArray(JSON.stringify(location), data.lat, data.lng, 'stop', data.params).then((response) => {
+                                ToastAndroid.show('Stop Success', ToastAndroid.SHORT);
+                            });
+                        });
+                    }
+                });
                 BackgroundTimer.stopBackgroundTimer(intervalId);
-
                 AsyncStorage.setItem('@status:key', 'false');
-                ToastAndroid.show('Stop', ToastAndroid.SHORT);
-
             }, (error) => console.log('This is the error ', error),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
     }
 
-
     static process(params) {
-        this.getLocation(
-            (position) => {
-                console.log(position);
-                var lat = JSON.stringify(position.coords.latitude);
-                var lng = JSON.stringify(position.coords.longitude);
-                var status = 'otw';
-                tripApi.Trip(lat, lng, status, params).then((response) => {
-                    ToastAndroid.show('lat: ' + JSON.stringify(position.coords.latitude) + ', ' + 'lng: ' + JSON.stringify(position.coords.longitude), ToastAndroid.SHORT);
-                });
-
-            }, (error) => console.log('This is the error ', error),
+        this.getLocation((position) => {
+            let location = {
+                'lat': JSON.stringify(position.coords.latitude),
+                'lng': JSON.stringify(position.coords.longitude)
+            };
+            listLocation.push(location);
+            AsyncStorage.setItem('@status:location', JSON.stringify(listLocation));
+            AsyncStorage.getItem('@status:location', (err, result) => {
+                if (result !== null || result !== undefined) {
+                    let _lengtLocation = JSON.parse(result).length;
+                    let data = {
+                        'result': result,
+                        'lat': location.lat,
+                        'lng': location.lng,
+                        'status': 'otw',
+                        'params': params
+                    }
+                    console.log(result);
+                    if (_lengtLocation === 10) {
+                        this.pushData(data);
+                    }
+                }
+            });
+        }, (error) => console.log('This is the error ', error),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
+
+    }
+    static pushData(data) {
+        return tripApi.TripArray(data.result, data.lat, data.lng, data.status, data.params).then((response) => {
+            AsyncStorage.removeItem('@status:location');
+            listLocation = [];
+            ToastAndroid.show('Push Data Success', ToastAndroid.SHORT);
+        });
     }
 
     static getLocation(onSuccess, onError, options) {
