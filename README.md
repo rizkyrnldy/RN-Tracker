@@ -8,11 +8,11 @@ npm install rn-tracker@latest --save
 
 react-native link rn-tracker
 ```
-Install [`react-native-background-timer`](https://github.com/ocetnik/react-native-background-timer) for service in background 
+Install [`react-native-background-job`](https://github.com/vikeri/react-native-background-job) for service in background 
 ```sh
-npm install react-native-background-timer --save
+npm install react-native-background-job --save
 
-react-native link react-native-background-timer
+react-native link react-native-background-job
 ```
 Edit <b>config.js</b> <small>(File in: YOUR_PROJECT/node_module/rn-tracker/config.js)</small>
 ```sh

@@ -43,6 +43,7 @@ var post = {
         }).then(
             (responseData) => responseData.json()
         ).catch(function (err) {
+            console.log(1, err);
             return err;
         })
     }
