@@ -7,12 +7,12 @@ import BackgroundJob from 'react-native-background-job';
 const RNTGEO = NativeModules.RNTGEO;
 var listLocation = [];
 const eventNames = ['fusedLocation', 'fusedLocationError'];
-
+const jobKey = 'RNTGEO-KEY';
 export default class RNTracker {
 
     static async start(params) {
         BackgroundJob.register({
-            jobKey: 'RNTGEO-KEY',
+            jobKey: jobKey,
             job: () => this.process(params),
         });
         RNTGEO.startLocationUpdates();
@@ -27,7 +27,7 @@ export default class RNTracker {
             if (params.btn !== undefined && params.btn) {
                 tripApi.TripArray(JSON.stringify(location), location.lat, location.lng, status, params).then((response) => {
                     BackgroundJob.schedule({
-                        jobKey: 'RNTGEO-KEY',
+                        jobKey: jobKey,
                         period: config.timeInterval,
                         exact: true,
                         allowWhileIdle: true,
@@ -38,7 +38,7 @@ export default class RNTracker {
                 });
             } else {
                 BackgroundJob.schedule({
-                    jobKey: 'RNTGEO-KEY',
+                    jobKey: jobKey,
                     period: config.timeInterval,
                     exact: true,
                     allowWhileIdle: true,
@@ -84,7 +84,7 @@ export default class RNTracker {
                     });
                 }
             });
-            BackgroundJob.cancelAll();
+            BackgroundJob.cancel({ jobKey: jobKey });
             this.stopRequest(this.getRequest);
             RNTGEO.stopLocationUpdates();
             AsyncStorage.setItem('@status:key', 'false');
