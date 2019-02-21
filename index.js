@@ -1,5 +1,5 @@
 'use strict';
-import { NativeModules, DeviceEventEmitter, ToastAndroid, AsyncStorage } from 'react-native';
+import { NativeModules, DeviceEventEmitter, ToastAndroid, AsyncStorage, NetInfo } from 'react-native';
 import tripApi from 'rn-tracker/api/post';
 import config from './config';
 import BackgroundJob from 'react-native-background-job';
@@ -8,6 +8,7 @@ const RNTGEO = NativeModules.RNTGEO;
 var listLocation = [];
 const eventNames = ['fusedLocation', 'fusedLocationError'];
 const jobKey = 'RNTGEO-KEY';
+let lengthPush, lengthPushDefault = 10;
 export default class RNTracker {
 
     static async start(params) {
@@ -18,6 +19,7 @@ export default class RNTracker {
         RNTGEO.startLocationUpdates();
         RNTGEO.setLocationInterval(config.timeInterval);
         RNTGEO.setFastestLocationInterval(config.timeInterval / 2);
+        RNTGEO.setSmallestDisplacement(10);
         this.getLocation().getFusedLocation().then((res) => {
             let location = {
                 'lat': JSON.stringify(res.latitude),
@@ -87,6 +89,7 @@ export default class RNTracker {
             BackgroundJob.cancel({ jobKey: jobKey });
             this.stopRequest(this.getRequest);
             RNTGEO.stopLocationUpdates();
+            lengthPush = lengthPushDefault;
             AsyncStorage.setItem('@status:key', 'false');
         });
     }
@@ -112,9 +115,18 @@ export default class RNTracker {
                     }
                     console.log(result);
                     ToastAndroid.show('Lat: ' + location.lat + ' - ' + 'Lang: ' + location.lng, ToastAndroid.SHORT);
-                    if (_lengtLocation === 10) {
-                        this.pushData(data);
-                    }
+
+                    NetInfo.isConnected.fetch().then(isConnected => {
+                        if (isConnected) {
+                            if (_lengtLocation === lengthPush) {
+                                this.pushData(data);
+                                lengthPush = lengthPushDefault;
+                            }
+                        } else {
+                            lengthPush = lengthPush + 1;
+                        }
+
+                    });
                 }
             });
         });
